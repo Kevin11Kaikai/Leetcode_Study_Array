@@ -1,13 +1,23 @@
 # Leetcode Array Solution in Python
-## Max Consecutive Ones - Leetcode 485
+## ✅ Leetcode 485 — Max Consecutive Ones
 
-## Problem Summary
+---
+
+### 🧩 Problem Summary
 Given a binary array `nums` (only containing 0s and 1s), return the maximum number of consecutive 1s in the array.
 
-## Key Knowledge Points
-### 1. Array Traversal Techniques
+```python
+Input: nums = [1,1,0,1,1,1]
+Output: 3  # Because the maximum number of consecutive 1s is three
+```
+
+---
+
+### 📚 Key Knowledge Points
+
+#### 1. Array Traversal Techniques
 - **`for num in nums:`**  
-  Simple iteration over elements; most readable when only values are needed.  
+  Simple iteration over elements.  
   Example:
   ```python
   for num in [1, 0, 1]:
@@ -15,7 +25,7 @@ Given a binary array `nums` (only containing 0s and 1s), return the maximum numb
   ```
 
 - **`for index, element in enumerate(nums):`**  
-  Access both index and value simultaneously; useful when the position matters.  
+  Access both index and value simultaneously.  
   Example:
   ```python
   for i, val in enumerate([1, 0, 1]):
@@ -23,7 +33,7 @@ Given a binary array `nums` (only containing 0s and 1s), return the maximum numb
   ```
 
 - **`for i in range(len(nums)):`**  
-  Traditional loop using indices; helpful if you need to compare with neighbors.  
+  Traditional index-based loop.  
   Example:
   ```python
   nums = [1, 0, 1]
@@ -32,20 +42,49 @@ Given a binary array `nums` (only containing 0s and 1s), return the maximum numb
           print(f"nums[{i}] and nums[{i-1}] are the same")
   ```
 
-### 2. Variable Initialization
-- `count = 0`: Tracks current streak of 1s.
-- `max_count = 0`: Tracks the longest streak found.
+#### 2. Variable Initialization
+- `count = 0`: Tracks the current streak of 1s.
+- `max_count = 0`: Tracks the longest streak found so far.
 
-### 3. Dynamic Update
-- Use `max_count = max(max_count, count)` to continually update the result during traversal.
-
-## Approach
-Traverse the array once. For each 1 encountered, increase the count of current consecutive 1s. 
-If a 0 is found, reset the count to 0. At each step, compare and update the maximum streak using `max()`.
+#### 3. Dynamic Update
+- Use `max_count = max(max_count, count)` to update the result at each step.
 
 ---
 
-## Python Code
+### 🧠 Approach
+#### One-Pass Counter Update
+
+**Core Idea:**
+- Traverse the list once.
+- If current number is 1, increment `count`.
+- If current number is 0, reset `count = 0`.
+- After each update, compare with `max_count` and update if needed.
+
+This ensures:
+- O(n) time complexity (single traversal)
+- O(1) space complexity (only two counters used)
+
+---
+
+### 📝 Step-by-Step Example
+```python
+nums = [1, 1, 0, 1, 1, 1]
+
+# Initial: count = 0, max_count = 0
+
+# num = 1 → count = 1 → max_count = 1
+# num = 1 → count = 2 → max_count = 2
+# num = 0 → count = 0 → max_count = 2
+# num = 1 → count = 1 → max_count = 2
+# num = 1 → count = 2 → max_count = 2
+# num = 1 → count = 3 → max_count = 3
+
+# Final result: 3
+```
+
+---
+
+### ✅ Python Code with Comments
 ```python
 class Solution(object):
     def findMaxConsecutiveOnes(self, nums):
@@ -57,7 +96,7 @@ class Solution(object):
         count = 0
         max_count = 0
 
-        # Traverse the array using: for num in nums
+        # Traverse the array
         for num in nums:
             if num == 1:
                 # Increase current streak count
@@ -71,6 +110,15 @@ class Solution(object):
 
         return max_count
 ```
+
+---
+
+### ✅ Summary
+- Use a simple pass through the array.
+- Count consecutive 1s and track the maximum.
+- No extra space required — only counters.
+- Great problem to master **array traversal + conditional counting**.
+
 ## ✅ Leetcode 1 — Two Sum
 
 ---
