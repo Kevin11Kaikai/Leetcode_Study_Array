@@ -71,6 +71,119 @@ class Solution(object):
 
         return max_count
 ```
+## ✅ Leetcode 1 — Two Sum
+
+---
+
+### 🧩 Problem Summary
+Given an integer array `nums` and an integer `target`, return the **indices** of the two numbers such that they add up to `target`.
+
+You **must** return exactly one solution, and **you may not use the same element twice**.
+
+```python
+Input: nums = [2, 7, 11, 15], target = 9
+Output: [0, 1]  # Because nums[0] + nums[1] == 9
+```
+
+---
+
+### 📚 Key Knowledge Points
+
+#### 1. Hash Map (Dictionary) for Constant-Time Lookup
+- Dictionaries in Python offer **O(1)** average time complexity for insert and lookup.
+- We use a dict to **store previously seen numbers** and their indices.
+
+```python
+seen = {}
+seen[2] = 0  # number 2 seen at index 0
+```
+
+#### 2. Complement Logic
+If `num + complement = target`, then `complement = target - num`.
+
+At each step, we check:
+> 🔍 "Have I seen `target - num` before?"
+>
+> If yes → That’s the pair!
+
+#### 3. Order of Operations Matters
+You must check the `complement` **before** storing `num` into the hashmap.
+Otherwise, you might return the same index twice.
+
+#### 4. Enumeration
+To access both value and index, use `enumerate()`:
+```python
+for i, num in enumerate(nums):
+    ...
+```
+
+#### 5. Edge Cases
+- Only one solution is guaranteed — no need to handle multiple answers.
+- Cannot use the same index twice: `[i, j]` with `i ≠ j`.
+
+---
+
+### 🧠 Approach
+#### One-Pass Hash Map
+
+**Core Idea:**
+- Traverse the list once, for each `num`, calculate its `complement = target - num`.
+- Check if complement is in `seen`. If so, return `[seen[complement], i]`.
+- Otherwise, store `num` with its index in `seen`.
+
+This ensures:
+- No nested loop (so it's O(n))
+- Space is O(n) for the dictionary
+
+---
+
+### 📝 Step-by-Step Example
+```python
+nums = [3, 2, 4], target = 6
+
+# i = 0, num = 3, complement = 3
+→ not in seen → store: {3: 0}
+
+# i = 1, num = 2, complement = 4
+→ not in seen → store: {3: 0, 2: 1}
+
+# i = 2, num = 4, complement = 2
+→ 2 in seen at index 1 → return [1, 2]
+```
+
+---
+
+### ✅ Python Code with Comments
+```python
+class Solution(object):
+    def twoSum(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        # Dictionary to store seen numbers and their indices
+        seen = {}
+
+        # Traverse the array
+        for i, num in enumerate(nums):
+            # Calculate the needed complement
+            complement = target - num
+
+            # If complement is already seen, return the pair
+            if complement in seen:
+                return [seen[complement], i]
+
+            # Otherwise, store current number and index
+            seen[num] = i
+```
+
+---
+
+### ✅ Summary
+- Use a hash map to **reduce time from O(n²) → O(n)**.
+- Carefully handle the **order of storing vs. checking**.
+- Great first problem to master **hash maps + complement logic**.
 
 ---
 
