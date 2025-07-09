@@ -1,4 +1,5 @@
-# Max Consecutive Ones - Leetcode 485
+#Leetcode Array Solution in Python
+## Max Consecutive Ones - Leetcode 485
 
 ## Problem Summary
 Given a binary array `nums` (only containing 0s and 1s), return the maximum number of consecutive 1s in the array.
