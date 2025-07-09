@@ -1,4 +1,4 @@
-#Leetcode Array Solution in Python
+# Leetcode Array Solution in Python
 ## Max Consecutive Ones - Leetcode 485
 
 ## Problem Summary
