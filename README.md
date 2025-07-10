@@ -233,6 +233,135 @@ class Solution(object):
 - Carefully handle the **order of storing vs. checking**.
 - Great first problem to master **hash maps + complement logic**.
 
+## 🚀 Leetcode 283 - Move Zeroes
+
+---
+
+### 📌 Problem Summary
+Given an integer array `nums`, move all `0`'s to the end of it while maintaining the **relative order** of the non-zero elements.
+
+You must perform the operation **in-place** with the **least possible operations**.
+
+```python
+Input:  nums = [0, 1, 0, 3, 12]
+Output: [1, 3, 12, 0, 0]
+```
+
+---
+
+### 📚 Key Knowledge Points
+
+#### 1. In-Place Modification
+You must not allocate another array. All changes must be done within the original list.
+
+#### 2. Maintain Relative Order
+The relative order of the non-zero elements must remain the same.
+
+#### 3. Two-Pointer Pattern
+- Pointer `i`: current element in iteration  
+- Pointer `last_nonzero_index`: the next position where a non-zero element should be placed
+
+---
+
+### 🧠 Optimal Approach
+
+#### ✅ Algorithm
+1. Initialize `last_nonzero_index = 0`
+2. Traverse the list from left to right
+3. If `nums[i] != 0`:
+   - Copy it to `nums[last_nonzero_index]`
+   - If `i ≠ last_nonzero_index`, clear `nums[i] = 0`
+   - Advance `last_nonzero_index`
+
+#### 🔍 Insight
+You're gradually building the "non-zero segment" at the beginning of the list, and pushing zeros to the end as a result.
+
+---
+
+### ✅ Python Code (with comments)
+```python
+class Solution:
+    def moveZeroes(self, nums):
+        last_nonzero_index = 0
+
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[last_nonzero_index] = nums[i]
+                if i != last_nonzero_index:
+                    nums[i] = 0
+                last_nonzero_index += 1
+```
+
+---
+
+### ⏱️ Complexity
+| Metric            | Value |
+|-------------------|--------|
+| Time Complexity   | O(n)  |
+| Space Complexity  | O(1)  |
+
+---
+
+### 🧪 Example Walkthrough
+```python
+Input: [0, 1, 0, 3, 12]
+
+Steps:
+- i=1: move 1 to index 0, clear index 1 → [1, 0, 0, 3, 12]
+- i=3: move 3 to index 1, clear index 3 → [1, 3, 0, 0, 12]
+- i=4: move 12 to index 2, clear index 4 → [1, 3, 12, 0, 0]
+```
+
+---
+
+### ⚠️ Mistake Log: What I Tried and Why It Failed
+
+#### ❌ Mistake 1: Only increment pointer when moving elements
+```python
+if nums[i] != 0:
+    nums[last_nonzero_index] = nums[i]
+    if i != last_nonzero_index:
+        nums[i] = 0
+        last_nonzero_index += 1
+```
+**Bug:**
+If `i == last_nonzero_index`, the pointer won’t move forward. This causes repeated writes and breaks loop termination.
+
+---
+
+#### ❌ Mistake 2: Prematurely incrementing pointer before conditional check
+```python
+if nums[i] != 0:
+    nums[last_nonzero_index] = nums[i]
+    last_nonzero_index += 1
+
+    if i != last_nonzero_index:
+        nums[i] = 0
+```
+**Bug:**
+You incremented `last_nonzero_index` too early. `i != last_nonzero_index` is now comparing against the next position, not the current one. This causes some zeros not to be written when they should be.
+
+---
+
+#### ❌ Mistake 3: Combining logic into a single condition
+```python
+if nums[i] != 0 and i != last_nonzero_index:
+    nums[last_nonzero_index] = nums[i]
+    nums[i] = 0
+    last_nonzero_index += 1
+```
+**Bug:**
+When `i == last_nonzero_index`, this block is skipped entirely, so the pointer doesn’t move forward and the algorithm freezes.
+
+---
+
+### 🧠 Final Takeaways
+- Avoid writing `last_nonzero_index += 1` too early or too late — **timing matters!**
+- Think carefully about when two pointers are equal vs. unequal
+- Try to separate "data movement" from "state update" in your logic
+- Debug by tracing small inputs like `[0, 1]`, `[2, 1]`, `[0,0,1]` step by step
+
+
 ---
 
 ## Tags
