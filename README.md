@@ -361,6 +361,180 @@ When `i == last_nonzero_index`, this block is skipped entirely, so the pointer d
 - Try to separate "data movement" from "state update" in your logic
 - Debug by tracing small inputs like `[0, 1]`, `[2, 1]`, `[0,0,1]` step by step
 
+## 🧼 Leetcode 27 - Remove Element
+
+---
+
+### 📌 Problem Summary
+Given an array `nums` and a value `val`, remove all instances of that value **in-place** and return the new length.
+
+You **must not use extra space**, and **the order of elements may be changed**.
+
+```python
+Input:  nums = [3, 2, 2, 3], val = 3
+Output: 2, nums = [2, 2, _, _]
+```
+
+---
+
+### 📚 Key Knowledge Points
+
+#### 1. In-Place Overwrite
+- You don't physically "delete" values.
+- Instead, overwrite valid values to the front of the array.
+
+#### 2. Order Does Not Matter
+- There's no need to preserve the order of remaining elements.
+
+#### 3. Write Pointer Technique
+- Use a second pointer to mark the "write position" of the next valid element.
+
+---
+
+### ✅ Approach: Overwrite with Write Pointer
+
+#### 🔁 Algorithm
+1. Initialize `k = 0`, the write pointer.
+2. Traverse each element with index `i`.
+3. If `nums[i] != val`:
+   - Write `nums[i]` to `nums[k]`
+   - Move `k` forward
+4. After the loop, the first `k` elements are the new result.
+
+---
+
+### 📝 Example Walkthrough
+```python
+Input: nums = [3, 2, 2, 3], val = 3
+
+Initial: k = 0
+
+i = 0 → nums[i] = 3 → skip
+
+i = 1 → nums[i] = 2 → nums[0] = 2 → k = 1
+
+i = 2 → nums[i] = 2 → nums[1] = 2 → k = 2
+
+i = 3 → nums[i] = 3 → skip
+
+Return: k = 2, nums = [2, 2, _, _]
+```
+
+---
+
+### ✅ Python Code (with comments)
+```python
+class Solution:
+    def removeElement(self, nums, val):
+        k = 0
+        for i in range(len(nums)):
+            if nums[i] != val:
+                nums[k] = nums[i]
+                k += 1
+        return k
+```
+
+---
+
+### ⏱️ Complexity
+| Metric            | Value |
+|-------------------|--------|
+| Time Complexity   | O(n)  |
+| Space Complexity  | O(1)  |
+
+---
+
+### ⚠️ Common Mistakes
+- ❌ Using `nums.remove(val)` or `nums.pop()` in a loop → O(n²) time
+- ❌ Returning the modified array instead of the **length**
+- ❌ Forgetting that **order does not matter** in this problem
+
+---
+
+### 🔁 Comparison: Remove Element vs Move Zeroes
+| Feature                   | Remove Element (27)       | Move Zeroes (283)         |
+|---------------------------|----------------------------|----------------------------|
+| Remove target?            | A specific `val`           | Value `0`                  |
+| Keep order?               | ❌ Not required             | ✅ Required                |
+| Write pointer?            | ✅ Yes, to compact values   | ✅ Yes, to place non-zeros |
+| Clean up old spot?        | ❌ No need                 | ✅ Yes, must set to `0`    |
+| Return value              | New length `k`             | None (modifies in-place)   |
+| Optimization trick        | Can swap from end (if allowed) | Must preserve full sequence |
+
+---
+
+### 🧠 Core Abstraction
+Both use the **two-pointer overwrite pattern**:
+```python
+write = 0
+for read in range(len(nums)):
+    if should_keep(nums[read]):
+        nums[write] = nums[read]
+        if read != write:
+            maybe_clean(nums[read])
+        write += 1
+```
+- In Remove Element: keep if `nums[read] != val`, no clean-up needed.
+- In Move Zeroes: keep if `nums[read] != 0`, and clean `nums[read]` if moved.
+
+---
+
+### ✨ Analogy
+| Problem         | Real-world Analogy                          |
+|----------------|----------------------------------------------|
+| Remove Element | Tossing unwanted cards from a deck          |
+| Move Zeroes    | Sorting clean clothes to front, trash to back |
+
+
+---
+
+### 🔁 Loop Pattern vs Problem Type Summary
+
+Understanding which loop pattern to use is crucial for writing clean, efficient, and correct solutions.  
+Here's a breakdown of loop types in Python and when they're typically used in array problems:
+
+| Loop Pattern                         | When to Use                                                       | Example Problems                          |
+|--------------------------------------|--------------------------------------------------------------------|-------------------------------------------|
+| `for x in nums:`                     | When you only care about the **element values**, not their indices | **485. Max Consecutive Ones** (counting streaks) |
+| `for i in range(len(nums)):`         | When you need to **modify array positions**, use **two pointers**, or manage index control | **283. Move Zeroes**, **27. Remove Element** |
+| `for i, x in enumerate(nums):`       | When you need both the **index and value**, typically for **hashmap lookups** or positional logic | **1. Two Sum** (index-value mapping)      |
+
+---
+
+### 🧠 Interpretation Guide
+
+- `for x in nums:`  
+  Best for **pure value-based traversal**, often used in **prefix sums**, **counting**, or **window tracking** where position doesn't matter.
+
+- `for i in range(len(nums)):`  
+  Required when doing **in-place modification**, **index-based comparisons**, or implementing **write pointers**.
+
+- `for i, x in enumerate(nums):`  
+  Ideal when you need to **remember the position** of a value, or use the index in a **hashmap**, such as finding complements or distances.
+
+---
+
+### 🧩 Loop Type → Problem Archetype Mapping
+
+| Problem Archetype           | Preferred Loop Type              | Why |
+|-----------------------------|-----------------------------------|-----|
+| Hashmap + Lookup Problems   | `enumerate(nums)`                | Need index + value for storage/lookup |
+| Value Counting              | `for num in nums:`               | Just need values, no position needed |
+| In-place Write or Filter    | `range(len(nums))` + 2 pointers  | Need precise index control to modify elements |
+
+---
+
+### 🔄 Bonus: General Template for In-Place Overwrite
+
+```python
+write = 0
+for read in range(len(nums)):
+    if nums[read] satisfies condition:
+        nums[write] = nums[read]
+        if read != write:
+            # optional: clear old spot or apply extra logic
+        write += 1
+
 
 ---
 
